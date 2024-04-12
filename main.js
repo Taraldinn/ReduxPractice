@@ -5,28 +5,24 @@
 
 import { createStore } from 'redux';
 
-const INCREMENT = 'INCREMENT';
-const DECREMENT = 'DECREMENT';
-const RESET = 'RESET';
 
-const incrementByVAlue = 'INCREMENT_BY_VALUE';
+const RESET = 'RESET';
+const ADD_USER = 'ADD_USER';
 
 const initialState = {
-    count : 0,
+    users : ["anis"],
+    count : 1,
 }
 
+// Action
 
-const incrementCounterAction = () => {
+const addUserAction = (user) => {
     return {
-        type: INCREMENT,
+        type: ADD_USER,
+        payload: user,
     };
 }
 
-const decrementCounterAction = () => {
-    return {
-        type: DECREMENT,
-    };
-}
 
 const resetCounterAction = () => {
     return {
@@ -34,39 +30,17 @@ const resetCounterAction = () => {
     };
 }
 
-const incrementByValueAction = (value) => {
-    return {
-        type: incrementByVAlue,
-        payload: value,
-    };
-    }
 
 
 //  Creating Reducer
 
 
-const counterReducer = (state=initialState, action) => {
+const userReducer = (state=initialState, action) => {
     switch (action.type) {
-        case INCREMENT:
+        case ADD_USER:
             return {
-                ...state,
+                users : [...state.users, action.payload],
                 count: state.count + 1,
-            
-            }
-        case DECREMENT:
-            return {
-                ...state,
-                count: state.count - 1,
-            }
-        case RESET:
-            return {
-                ...state,
-                count: 0,
-            }
-        case incrementByVAlue:
-            return {
-                ...state,
-                count: state.count + action.payload,
             }
         default:state
             break;
@@ -75,11 +49,14 @@ const counterReducer = (state=initialState, action) => {
 
 // Store
 
-const store = createStore(counterReducer);
+const store = createStore(userReducer);
 
 store.subscribe(() => {
     console.log(store.getState());  
 })
 
 
-store.dispatch(incrementByValueAction(5));
+store.dispatch(addUserAction("Aldinn"));
+store.dispatch(addUserAction("Salma"));
+store.dispatch(addUserAction("Rahman"));
+store.dispatch(resetCounterAction());
