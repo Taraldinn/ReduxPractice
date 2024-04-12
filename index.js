@@ -1,6 +1,11 @@
+import { applyMiddleware, createStore } from 'redux';
+import logger from 'redux-logger';
+
+import thunk from 'redux-thunk';
+
+
+
 //  Multiple Reducers
-import { combineReducers } from 'redux';
-import { createStore } from 'redux';
 
 
 
@@ -59,84 +64,16 @@ const productReducer = (state=initialProductState, action) => {
 
 // cart Reducer
 
-const GET_CART = "GET_CART";
-const ADD_TO_CART = "ADD_TO_CART";
-
-
-const initialCartState = {
-    cart: ["Sugar"],
-    numberOfItems: 1
-};
-
-// cart actions 
-
-const getCart = () => {
-    return {
-        type: GET_CART,
-    }
-}
-const addToCart = (product) => {
-    return {
-        type: ADD_TO_CART,
-        payload: product,
-    }
-
-    }
-
-
-
-
-// cart reducers 
-
-const cartReducer = (state=initialCartState, action) => {
-    switch (action.type) {
-        case getCart().type:
-
-            return {
-                ...state,
-            }
-            
-        case addToCart().type:
-            return {
-             cart : [...state.cart, action.payload],
-             numberOfItems: state.numberOfItems + 1}    
-    
-        default:
-            return state
-            break;
-    }
-}
-
-
-
-
-
-// Combaine Root Reducers
-
-const rootReducers = combineReducers({
-
-    productsR: productReducer,
-    cartR: cartReducer
-
-})
-
-
-
-
-
-
 
 
 
 // Store
+const middleware = applyMiddleware(thunk, logger);
 
-const store = createStore(rootReducers);
+const store = createStore(productReducer,middleware)
 store.subscribe(() => {
     console.log(store.getState())
 })
 
 store.dispatch(getProducts());
 store.dispatch(addProduct("Milk"));
-
-store.dispatch(getCart());
-store.dispatch(addToCart("Milk"));
